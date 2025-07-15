@@ -46,6 +46,21 @@ graph_builder.add_edge(START, "chatbot")
 graph_builder.add_edge("chatbot", END)
 graph = graph_builder.compile()
 
+from IPython.display import Image, display
+
+try:
+    # img = Image(graph.get_graph().draw_mermaid_png())
+    # 假设 graph.get_graph().draw_mermaid_png() 返回 PNG 字节流
+    img_data = graph.get_graph().draw_mermaid_png()
+    
+    # 将字节流写入文件
+    with open("graph.png", "wb") as f:
+        f.write(img_data)
+except Exception:
+    # This requires some extra dependencies and is optional
+    print ("Graph visualization is not available in this environment.")
+    pass
+
 def stream_graph_updates(user_input: str):
     for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
         for value in event.values():

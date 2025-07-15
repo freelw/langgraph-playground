@@ -6,4 +6,6 @@ conda activate langgraph
 pip install langchain-deepseek
 pip install langgraph
 pip install dotenv
+pip install langsmith
+pip install IPython
 ```
