@@ -1,7 +1,5 @@
 from typing import Annotated
-
 from typing_extensions import TypedDict
-
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 
@@ -13,7 +11,6 @@ load_dotenv()
 if not os.getenv("DEEPSEEK_API_KEY"):
     os.environ["DEEPSEEK_API_KEY"] = getpass.getpass("Enter your DeepSeek API key: ")
 
-
 llm = ChatDeepSeek(
     model="deepseek-chat",
     temperature=0,
@@ -23,20 +20,13 @@ llm = ChatDeepSeek(
     # other params...
 )
 
-
 class State(TypedDict):
     messages: Annotated[list, add_messages]
 
-
 graph_builder = StateGraph(State)
-
-
-#llm = init_chat_model("anthropic:claude-3-5-sonnet-latest")
-
 
 def chatbot(state: State):
     return {"messages": [llm.invoke(state["messages"])]}
-
 
 # The first argument is the unique node name
 # The second argument is the function or object that will be called whenever
@@ -46,10 +36,7 @@ graph_builder.add_edge(START, "chatbot")
 graph_builder.add_edge("chatbot", END)
 graph = graph_builder.compile()
 
-from IPython.display import Image, display
-
 try:
-    # img = Image(graph.get_graph().draw_mermaid_png())
     # 假设 graph.get_graph().draw_mermaid_png() 返回 PNG 字节流
     img_data = graph.get_graph().draw_mermaid_png()
     
@@ -59,13 +46,11 @@ try:
 except Exception:
     # This requires some extra dependencies and is optional
     print ("Graph visualization is not available in this environment.")
-    pass
 
 def stream_graph_updates(user_input: str):
     for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
         for value in event.values():
             print("Assistant:", value["messages"][-1].content)
-
 
 while True:
     try:
