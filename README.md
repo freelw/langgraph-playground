@@ -5,4 +5,5 @@ conda create --name langgraph python=3.11 -y
 conda activate langgraph
 pip install langchain-deepseek
 pip install langgraph
+pip install dotenv
 ```

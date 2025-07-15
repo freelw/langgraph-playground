@@ -8,7 +8,8 @@ from langgraph.graph.message import add_messages
 import getpass
 import os
 from langchain_deepseek import ChatDeepSeek
-
+from dotenv import load_dotenv
+load_dotenv()
 if not os.getenv("DEEPSEEK_API_KEY"):
     os.environ["DEEPSEEK_API_KEY"] = getpass.getpass("Enter your DeepSeek API key: ")
 
