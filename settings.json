@@ -1,7 +1,3 @@
 {
-    "python.envFile": "${workspaceFolder}/.env",
-    "python.env": {
-        "PYTHONPATH": "=/Users/danta/project/langgraph-playground/.conda/lib/python3.12/site-packages"
-    },
-    "python.defaultInterpreterPath": "/opt/anaconda3/envs/langgraph/bin/python"
+    "python.envFile": "${workspaceFolder}/.env"
 }
