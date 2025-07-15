@@ -8,4 +8,5 @@ pip install langgraph
 pip install dotenv
 pip install langsmith
 pip install IPython
+pip install -U langchain-tavily
 ```
