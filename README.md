@@ -17,3 +17,14 @@ pip install -U langchain-tavily
 * [deepseek.py](deepseek.py) 是 [1-build-basic-chatbot](https://langchain-ai.github.io/langgraph/tutorials/get-started/1-build-basic-chatbot/) 的实现
 * [tavily.py](tavily.py) 是 [2-add-tools](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/) 的实现
 * [tavily_with_prebuilt.py](tavily_with_prebuilt.py) 是 [2-add-tools](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/) 的 prebuilt实现
+
+## .env 配置说明
+
+```
+PYTHONPATH=/opt/anaconda3/envs/langgraph/lib/python3.11/site-packages
+DEEPSEEK_API_KEY=<deepseek api key>
+TAVILY_API_KEY=<tavily api key>
+```
+* PYTHONPATH conda环境包路径，用于vscode正确跳转，结合settings.json中的python.envFile
+* DEEPSEEK_API_KEY 填写自己的 deepseek api key
+* TAVILY_API_KEY 填写自己的 tavily api key
