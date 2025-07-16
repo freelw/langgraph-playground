@@ -5,9 +5,14 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langchain_deepseek import ChatDeepSeek
 from langgraph.checkpoint.memory import MemorySaver
+from langchain_tavily import TavilySearch
+from langgraph.prebuilt import ToolNode, tools_condition
 memory = MemorySaver()
 from dotenv import load_dotenv
 load_dotenv()
+
+tool = TavilySearch(max_results=2)
+tools = [tool]
 
 llm = ChatDeepSeek(
     model="deepseek-chat",
@@ -18,18 +23,30 @@ llm = ChatDeepSeek(
     # other params...
 )
 
+llm_with_tools = llm.bind_tools(tools)
+
 class State(TypedDict):
     messages: Annotated[list, add_messages]
 
 graph_builder = StateGraph(State)
 
 def chatbot(state: State):
-    return {"messages": [llm.invoke(state["messages"])]}
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
 
-
+graph_builder = StateGraph(State)
 graph_builder.add_node("chatbot", chatbot)
+tool_node = ToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+
+# The `tools_condition` function returns "tools" if the chatbot asks to use a tool, and "END" if
+# it is fine directly responding. This conditional routing defines the main agent loop.
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition
+)
+# Any time a tool is called, we return to the chatbot to decide the next step
+graph_builder.add_edge("tools", "chatbot")
 graph_builder.add_edge(START, "chatbot")
-graph_builder.add_edge("chatbot", END)
 graph = graph_builder.compile(checkpointer=memory)
 
 config = {"configurable": {"thread_id": "1"}}
