@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 tool = TavilySearch(max_results=2)
+print("Tool initialized:", tool)
 tools = [tool]
 
 llm = ChatDeepSeek(
@@ -30,7 +31,9 @@ class BasicToolNode:
     """A node that runs the tools requested in the last AIMessage."""
 
     def __init__(self, tools: list) -> None:
+        # print("Initializing BasicToolNode with tools:", tools)
         self.tools_by_name = {tool.name: tool for tool in tools}
+        # print("Tools by name:", self.tools_by_name)
 
     def __call__(self, inputs: dict):
         if messages := inputs.get("messages", []):
@@ -61,6 +64,7 @@ def route_tools(
     Use in the conditional_edge to route to the ToolNode if the last message
     has tool calls. Otherwise, route to the end.
     """
+    print("\nstate:", state)
     if isinstance(state, list):
         ai_message = state[-1]
     elif messages := state.get("messages", []):
@@ -94,12 +98,8 @@ graph_builder.add_edge("tools", "chatbot")
 graph_builder.add_edge(START, "chatbot")
 graph = graph_builder.compile()
 
-
 try:
-    # 假设 graph.get_graph().draw_mermaid_png() 返回 PNG 字节流
     img_data = graph.get_graph().draw_mermaid_png()
-    
-    # 将字节流写入文件
     with open("graph1.png", "wb") as f:
         f.write(img_data)
 except Exception:
