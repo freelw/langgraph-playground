@@ -4,8 +4,8 @@ from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langchain_deepseek import ChatDeepSeek
-from langchain_tavily import TavilySearch
-from langchain_core.messages import ToolMessage
+from langgraph.checkpoint.memory import MemorySaver
+memory = MemorySaver()
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -30,7 +30,9 @@ def chatbot(state: State):
 graph_builder.add_node("chatbot", chatbot)
 graph_builder.add_edge(START, "chatbot")
 graph_builder.add_edge("chatbot", END)
-graph = graph_builder.compile()
+graph = graph_builder.compile(checkpointer=memory)
+
+config = {"configurable": {"thread_id": "1"}}
 
 try:
     # 假设 graph.get_graph().draw_mermaid_png() 返回 PNG 字节流
@@ -44,9 +46,8 @@ except Exception:
     print ("Graph visualization is not available in this environment.")
 
 def stream_graph_updates(user_input: str):
-    for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
-        for value in event.values():
-            print("Assistant:", value["messages"][-1].content)
+    for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}, config=config, stream_mode="values"):
+        event["messages"][-1].pretty_print()
 
 while True:
     try:
