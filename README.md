@@ -17,6 +17,7 @@ pip install -U langchain-tavily
 * [deepseek.py](deepseek.py) 是 [1-build-basic-chatbot](https://langchain-ai.github.io/langgraph/tutorials/get-started/1-build-basic-chatbot/) 的实现
 * [tavily.py](tavily.py) 是 [2-add-tools](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/) 的实现
 * [tavily_with_prebuilt.py](tavily_with_prebuilt.py) 是 [2-add-tools](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/) 的 prebuilt实现
+* [memory.py](memory.py) 是 [3-add-memory](https://langchain-ai.github.io/langgraph/tutorials/get-started/3-add-memory/) 的实现
 
 ## .env 配置说明
 
